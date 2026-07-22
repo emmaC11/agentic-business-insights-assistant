@@ -7,10 +7,9 @@ from ingestion.sales_data_model import SalesRecord
 import os
 import logging
 
-load_dotenv()
 logger = logging.getLogger(__name__)
 
-client = Square(
-    environment=SquareEnvironment.PRODUCTION,
-    token=os.environ['SQUARE_PROD_ACCESS_TOKEN']
-)
+class SquareIngestionClient:
+    def __init__(self, account_id, token, env):
+        self.account_id = account_id
+        self._client = Square(environment=env, token=token)
