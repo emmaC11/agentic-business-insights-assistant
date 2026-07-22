@@ -1,10 +1,8 @@
 from square import Square
 from square.environment import SquareEnvironment
 from square.core.api_error import ApiError
-from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 from ingestion.sales_data_model import SalesRecord
-import os
 import logging
 
 logger = logging.getLogger(__name__)
