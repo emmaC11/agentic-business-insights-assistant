@@ -28,11 +28,27 @@ class SquareIngestionClient:
         for obj in self._client.catalog.list(
             types="ITEM,ITEM_VARIATION,CATEGORY"
         ):
-            if count >= 3:
-                break
-            count += 1
-            print('call reaching endpoint')
-            print(f'catalog object -> \n {obj}')
+
+            # print('call reaching endpoint')
+            # print(f'catalog object -> \n {obj}')
+            # print(f'catalog object type -> {obj.type}')
+            # if obj.type == "CATEGORY":
+            #     print(f'catalog category -> {obj}')
+            #     if count >= 1:
+            #         break
+            #     count += 1
+
+            # if obj.type == "ITEM":
+                # print(f'catalog item -> \n {obj}')
+                # if count >= 1:
+                #     break
+                # count += 1
+
+            if obj.type == "ITEM_VARIATION":
+                print(f'catalog item variation \n -> {obj}')
+                if count == 1:
+                    break
+                count += 1
         
 
 
