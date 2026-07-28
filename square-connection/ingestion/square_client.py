@@ -32,6 +32,7 @@ class SquareIngestionClient:
                 break
             count += 1
             print('call reaching endpoint')
+            print(f'catalog object -> \n {obj}')
         
 
 
