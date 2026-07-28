@@ -14,6 +14,7 @@ class SquareIngestionClient:
 
 
     def catalog_lookup(self) -> dict:
+        count = 0
         """
         create connection between items & categories -> {"item": name, "category": name}
         need to create lookup as they are not returned in the same API
@@ -24,6 +25,14 @@ class SquareIngestionClient:
         categories: dict[str, str] = {}
         items: dict[str, str] = {}
         variations: dict[str, str] = {}
+
+        for obj in self._client.catalog.list(
+            types="ITEM,ITEM_VARIATION,CATEGORY"
+        ):
+            if count >= 3:
+                break
+            count += 1
+            print('call reaching endpoint')
         
 
 
