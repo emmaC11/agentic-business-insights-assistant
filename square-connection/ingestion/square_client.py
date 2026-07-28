@@ -8,8 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class SquareIngestionClient:
-    def __init__(self, account_id, token, env):
-        self.account_id = account_id
+    def __init__(self, token, env):
         self._client = Square(environment=env, token=token)
 
 
