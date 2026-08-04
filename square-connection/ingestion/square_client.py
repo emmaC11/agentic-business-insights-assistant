@@ -60,10 +60,20 @@ class SquareIngestionClient:
                     item_id = getattr(var_data, "item_id", None)
                     variations[obj.id] = item_id
 
+        # build lookup to create item & cat relationship
+        lookup: dict = {}
+        for var_id, item_id in variations.items():
+            item_info = items.get(item_id, {})
+            cat_id = item_info.get("cat_id")
+            lookup[var_id] = {
+                "item": item_info.get("name", "NA"),
+                "category": categories.get(cat_id, "uncategorised")
+            }
+
 
         # print(categories)
         # print(len(categories))
-        print(variations)
+        print(lookup)
         
 
 
