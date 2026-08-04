@@ -20,35 +20,50 @@ class SquareIngestionClient:
         call once & cache in __init__
         """
 
+        """
+        obj.type == 
+        """
+
         # define ds type & initialize
-        categories: dict[str, str] = {}
-        items: dict[str, str] = {}
-        variations: dict[str, str] = {}
+        categories: dict[str, str] = {} # {cat_id: category}
+        items: dict[str, str] = {} # {item_name: cat_id}
+        variations: dict[str, str] = {} #{var_id: item_id}
 
         for obj in self._client.catalog.list(
             types="ITEM,ITEM_VARIATION,CATEGORY"
         ):
 
-            # print('call reaching endpoint')
-            # print(f'catalog object -> \n {obj}')
-            # print(f'catalog object type -> {obj.type}')
-            # if obj.type == "CATEGORY":
-            #     print(f'catalog category -> {obj}')
-            #     if count >= 1:
-            #         break
-            #     count += 1
+            # categories
+            # populates category dict with id & cat name
+            if obj.type == "CATEGORY":
+                cat_data = getattr(obj, "category_data", None)
+                if cat_data:
+                    categories[obj.id] = cat_data.name
 
-            # if obj.type == "ITEM":
-                # print(f'catalog item -> \n {obj}')
-                # if count >= 1:
-                #     break
-                # count += 1
+            # items
+            # populates item dict with item name & cat id
+            if obj.type == "ITEM":
+                item_data = getattr(obj, "item_data", None)
+                cats = getattr(item_data, "categories", None)
+                if cats:
+                    cat_id = cats[0].id
+                else:
+                    None
+                items[obj.id] = {"name": item_data.name, "cat_id": cat_id}
+     
 
+            # item variations
+            # populates variations dict with mapping of variation ID to parent item ID
             if obj.type == "ITEM_VARIATION":
-                print(f'catalog item variation \n -> {obj}')
-                if count == 1:
-                    break
-                count += 1
+                var_data = getattr(obj, "item_variation_data", None)
+                if var_data:
+                    item_id = getattr(var_data, "item_id", None)
+                    variations[obj.id] = item_id
+
+
+        # print(categories)
+        # print(len(categories))
+        print(variations)
         
 
 
