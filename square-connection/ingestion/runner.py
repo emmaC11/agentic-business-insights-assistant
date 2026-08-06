@@ -12,6 +12,8 @@ client = SquareIngestionClient(
     env=SquareEnvironment.PRODUCTION
 )
 
-print("Calling catalog_lookup...")
-client.catalog_lookup()
-print("Done.")
+# print("Calling catalog_lookup...")
+# client.catalog_lookup()
+# print("Done.")
+
+client.fetch_orders("2026-08-01T00:00:00Z", "2026-08-05T00:00:00Z")
