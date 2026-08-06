@@ -4,12 +4,15 @@ from square.core.api_error import ApiError
 from datetime import datetime, timedelta, timezone
 from ingestion.sales_data_model import SalesRecord
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 
 class SquareIngestionClient:
     def __init__(self, token, env):
         self._client = Square(environment=env, token=token)
+        self.account_id = "TestBusinessAcc"
+        self.loc = [os.environ['LOCATION_ID']]
 
 
     def catalog_lookup(self) -> dict:
@@ -74,6 +77,93 @@ class SquareIngestionClient:
         # print(categories)
         # print(len(categories))
         print(lookup)
+
+
+    
+    def fetch_orders(self, startDate, endDate) -> list[SalesRecord]:
+        """
+        pull all completed orders between date ranges passed & return a SalesRecord object
+        """
+
+        # fetch catalog items
+        catalog = self.catalog_lookup()
+
+        # temp hardcoded 
+        # startDate = "2026-08-01T00:00:00Z"
+        # endDate = "2026-08-05T00:00:00Z"
+
+        sales_records: list[SalesRecord] = []
+        page = 0
+
+        while True:
+            body: dict = {
+                "location_ids": self.loc,
+                "query": {
+                    "filter": {
+                        "state_filter": {"states": ["COMPLETED"]},
+                        "date_time_filter": {
+                            "closed_at": {"start_at": startDate, "end_at": endDate}
+                        },
+                    },
+                    "sort": {"sort_field": "CLOSED_AT", "sort_order": "ASC"},
+                },
+                "limit": 500,
+            }
+
+            # used claude to help build this logic
+            response = self._client.orders.search(**body)
+            page += 1
+            orders = getattr(response, "orders", None) or []
+
+            for order in orders:
+                closed_at = getattr(order, "closed_at", None)
+                if not closed_at:
+                    continue
+
+                order_date  = datetime.fromisoformat(closed_at.replace("Z", "+00:00"))
+                location_id = getattr(order, "location_id", "unknown")
+
+                for li in (getattr(order, "line_items", None) or []):
+                    if getattr(li, "item_type", None) != "ITEM":
+                        continue 
+
+                    var_id = getattr(li, "catalog_object_id", None)
+                    entry  = catalog.get(var_id, {}) if var_id else {}
+
+                    item_name = entry.get("item") or getattr(li, "name", None) or "Unknown"
+                    category  = entry.get("category", "Uncategorised")
+
+                    try:
+                        qty = float(getattr(li, "quantity", "0") or "0")
+                    except ValueError:
+                        qty = 0.0
+
+                    gross = getattr(li, "gross_sales_money", None)
+                    base  = getattr(li, "base_price_money", None)
+                    if gross and qty > 0:
+                        price_cents = round((getattr(gross, "amount", 0) or 0) / qty)
+                    elif base:
+                        price_cents = getattr(base, "amount", 0) or 0
+                    else:
+                        price_cents = 0
+
+                    # create new sales record with order info
+                    sales_records.append(SalesRecord(
+                        account_id=self.account_id,
+                        location_id=location_id,
+                        item=item_name,
+                        category=category,
+                        date=order_date,
+                        quantity=qty,
+                        price_cents=price_cents,
+                    ))
+
+            cursor = getattr(response, "cursor", None)
+            if not cursor:
+                break
+
+        print(sales_records)
+        return sales_records
         
 
 
