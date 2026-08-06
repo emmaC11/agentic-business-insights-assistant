@@ -73,13 +73,8 @@ class SquareIngestionClient:
                 "category": categories.get(cat_id, "uncategorised")
             }
 
+        return lookup
 
-        # print(categories)
-        # print(len(categories))
-        print(lookup)
-
-
-    
     def fetch_orders(self, startDate, endDate) -> list[SalesRecord]:
         """
         pull all completed orders between date ranges passed & return a SalesRecord object
