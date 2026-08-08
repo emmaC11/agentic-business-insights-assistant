@@ -89,6 +89,7 @@ class SquareIngestionClient:
 
         sales_records: list[SalesRecord] = []
         page = 0
+        cursor = None
 
         while True:
             body: dict = {
@@ -104,6 +105,8 @@ class SquareIngestionClient:
                 },
                 "limit": 500,
             }
+            if cursor:
+                body["cursor"] = cursor
 
             # used claude to help build this logic
             response = self._client.orders.search(**body)
