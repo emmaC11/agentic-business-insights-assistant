@@ -157,7 +157,6 @@ class SquareIngestionClient:
             if not cursor:
                 break
 
-        print(sales_records)
         return sales_records
         
 
