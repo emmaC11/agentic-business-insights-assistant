@@ -23,3 +23,14 @@ def save_sales_records(recs: list[SalesRecord], accountId: str) -> Path:
     out_dir = _REPO_ROOT / "data" / accountId
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "sales_raw.parquet"
+
+    # logic to add new df to existing 
+    if out_path.exists():
+        current_df = pd.read_parquet(out_path)
+        combined_df = pd.concat(current_df, sales_df)
+    else:
+        combined_df = sales_df
+
+    # dedup logic
+    combined_df = combined_df.drop_duplicates()
+    
