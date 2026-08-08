@@ -1,1 +1,3 @@
 squareup==44.1.0.20260520
+pandas==3.0.3
+pyarrow
