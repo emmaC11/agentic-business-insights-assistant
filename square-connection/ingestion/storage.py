@@ -5,7 +5,7 @@ from ingestion.sales_data_model import SalesRecord
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
-def save_sales_records(recs: list[SalesRecord], accountId: str) -> Path:
+def save_sales_records(recs: list[SalesRecord], account_id: str) -> Path:
     """
     save sales records called from square client 
     flow is pull from Square API -> build a table of SalesRecords with pd -> save as parquet -> everything downstream (EDA, features, models, MCP tools) reads that parquet file instead of calling directly from the API.
@@ -20,7 +20,7 @@ def save_sales_records(recs: list[SalesRecord], accountId: str) -> Path:
     sales_df["quantity"] = sales_df["quantity"].astype(float)
     sales_df["price_cents"] = sales_df["price_cents"].astype(int)
 
-    out_dir = _REPO_ROOT / "data" / accountId
+    out_dir = _REPO_ROOT / "data" / account_id
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "sales_raw.parquet"
 
