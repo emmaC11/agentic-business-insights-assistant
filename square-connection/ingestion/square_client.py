@@ -48,10 +48,7 @@ class SquareIngestionClient:
             if obj.type == "ITEM":
                 item_data = getattr(obj, "item_data", None)
                 cats = getattr(item_data, "categories", None)
-                if cats:
-                    cat_id = cats[0].id
-                else:
-                    None
+                cat_id = cats[0].id if cats else None
                 items[obj.id] = {"name": item_data.name, "cat_id": cat_id}
      
 
