@@ -2,6 +2,8 @@ import pandas as pd
 from pathlib import Path
 from ingestion.sales_data_model import SalesRecord
 
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+
 
 def save_sales_records(recs: list[SalesRecord], accountId: str) -> Path:
     """
@@ -17,4 +19,7 @@ def save_sales_records(recs: list[SalesRecord], accountId: str) -> Path:
     sales_df["date"] = pd.to_datetime(sales_df["date"], utc=True)
     sales_df["quantity"] = sales_df["quantity"].astype(float)
     sales_df["price_cents"] = sales_df["price_cents"].astype(int)
-    
+
+    out_dir = _REPO_ROOT / "data" / accountId
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / "sales_raw.parquet"
