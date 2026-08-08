@@ -33,4 +33,7 @@ def save_sales_records(recs: list[SalesRecord], accountId: str) -> Path:
 
     # dedup logic
     combined_df = combined_df.drop_duplicates()
+
+    print(f"saved {len(combined_df)} total rows to {out_path}")
+    return out_path
     
