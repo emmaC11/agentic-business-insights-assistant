@@ -27,7 +27,7 @@ def save_sales_records(recs: list[SalesRecord], accountId: str) -> Path:
     # logic to add new df to existing 
     if out_path.exists():
         current_df = pd.read_parquet(out_path)
-        combined_df = pd.concat(current_df, sales_df)
+        combined_df = pd.concat([current_df, sales_df])
     else:
         combined_df = sales_df
 
