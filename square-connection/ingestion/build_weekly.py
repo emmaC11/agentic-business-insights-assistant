@@ -70,5 +70,6 @@ def build_weekly_parquet(account_id: str):
     )
 
     print(type(weekly_agg))
+    print(weekly_agg.info())
     print(weekly_agg.shape)
     print(weekly_agg.head())
