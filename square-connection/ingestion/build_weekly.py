@@ -16,3 +16,8 @@ def build_weekly_parquet(account_id: str):
     sales_raw_data = pd.read_parquet(sales_raw_path)
     print(sales_raw_data.shape)
     print(sales_raw_data.head())
+
+    # add week col to each row (raw data only has date, we need to map to specific week, M->S)
+    # can remove time conversion if ingestion is set to correct timezone
+    sales_raw_data["week"] = pd.to_datetime(sales_raw_data["date"], utc=True).dt.tz_convert("Europe/Dublin").dt.to_period("W-SUN")
+    print(sales_raw_data.head())
