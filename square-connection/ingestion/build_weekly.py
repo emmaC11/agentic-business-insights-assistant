@@ -14,10 +14,40 @@ def build_weekly_parquet(account_id: str):
     # load raw parquet
     sales_raw_path = _REPO_ROOT / "data" / account_id / "sales_raw.parquet"
     sales_raw_data = pd.read_parquet(sales_raw_path)
-    print(sales_raw_data.shape)
-    print(sales_raw_data.head())
+    # print(sales_raw_data.shape)
+    # print(sales_raw_data.head())
 
     # add week col to each row (raw data only has date, we need to map to specific week, M->S)
     # can remove time conversion if ingestion is set to correct timezone
     sales_raw_data["week"] = pd.to_datetime(sales_raw_data["date"], utc=True).dt.tz_convert("Europe/Dublin").dt.to_period("W-SUN")
-    print(sales_raw_data.head())
+    # print(sales_raw_data.head())
+
+    # identify valid weeks - identify ingestion gaps, or if data pulled midweek
+    all_weeks = pd.period_range(
+        sales_raw_data["week"].min(),
+        sales_raw_data["week"].max()
+    )
+
+    # find gaps / weeks with no sales for that week
+    weeks_with_sales = set(sales_raw_data["week"])
+    gap_weeks = set(all_weeks) - weeks_with_sales
+
+    min_date = sales_raw_data["date"].min()
+    max_date = sales_raw_data["date"].max()
+
+    # check if ingestion start and end dates are midweek / partial
+    partial_weeks = set()
+    # .weekday 0-6 rep weekday
+    if min_date.weekday() != 0: # 0 -> monday
+        partial_weeks.add(all_weeks[0])
+    if max_date.weekday() != 6: # 6 -> sunday
+        partial_weeks.add(all_weeks[-1])
+
+    # combine sets
+    excluded = gap_weeks | partial_weeks
+    valid_weeks = pd.PeriodIndex(sorted(set(all_weeks) - excluded), freq="W-SUN")
+
+    print(f"cal weeks count ->{len(all_weeks)}")
+    print(f"gap weeks count -> {len(gap_weeks)} - {sorted(gap_weeks)}")
+    print(f"partial weeks count -> {len(partial_weeks)} -  {sorted(partial_weeks)}")
+    print(f"valid weeks count -> {len(valid_weeks)}")
