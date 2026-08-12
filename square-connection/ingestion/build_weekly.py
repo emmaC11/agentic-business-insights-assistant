@@ -51,3 +51,24 @@ def build_weekly_parquet(account_id: str):
     print(f"gap weeks count -> {len(gap_weeks)} - {sorted(gap_weeks)}")
     print(f"partial weeks count -> {len(partial_weeks)} -  {sorted(partial_weeks)}")
     print(f"valid weeks count -> {len(valid_weeks)}")
+
+    # agg one row per item per week
+    # currently same item can appear 5 times as seperate rows in the same week
+    # data shape we need is this data aggregated into one weekly row per item
+
+    # validate week is part of valid_weeks
+    valid_df = sales_raw_data[sales_raw_data["week"].isin(valid_weeks)]
+
+    weekly_agg = (
+        valid_df
+        .groupby(["item", "week"])
+        .agg(
+            quantity=("quantity","sum"), # sum input of quant
+            price_cents=("price_cents", "last") # take last value of price cents in each grouping (is same for all so any pick is fine)
+        )
+        .reset_index()
+    )
+
+    print(type(weekly_agg))
+    print(weekly_agg.shape)
+    print(weekly_agg.head())
