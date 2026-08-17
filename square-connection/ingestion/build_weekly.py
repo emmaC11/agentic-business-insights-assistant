@@ -109,10 +109,10 @@ def build_weekly_parquet(account_id: str):
     print(full_grid.head())
 
 
-    def assign_tier(weeks_sold:int):
-        if weeks_sold >= 26:
-            return "regular"
-        if weeks_sold >= 6:
-            return "intermittent"
-        else:
-            return "rare"
+def assign_tier(weeks_sold:int):
+    if weeks_sold >= 26:
+        return "regular"
+    if weeks_sold >= 6:
+        return "intermittent"
+    else:
+        return "rare"
