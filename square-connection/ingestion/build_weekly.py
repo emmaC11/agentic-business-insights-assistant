@@ -73,3 +73,23 @@ def build_weekly_parquet(account_id: str):
     print(weekly_agg.info())
     print(weekly_agg.shape)
     print(weekly_agg.head())
+
+    # add zero fill - products that did not sell for specific week quant shows as 0
+    # forecasting model needs this to recognise patterns
+
+    all_items = weekly_agg["item"].unique()
+
+    # map each item to each week
+    item_week_grid = pd.MultiIndex.from_product(
+        [all_items, valid_weeks],
+        names=["item", "week"],
+    )
+
+    # left-join onto our 'actual' data - not just item week pair, has quant price etc
+    full_grid = (
+        pd.DataFrame(index=item_week_grid)
+        .reset_index()
+        .merge(weekly_agg, on=["item", "week"], how="left")
+    )
+    print(full_grid.shape)
+    print(full_grid.head())
