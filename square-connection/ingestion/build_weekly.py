@@ -94,5 +94,15 @@ def build_weekly_parquet(account_id: str):
 
     full_grid["quantity"] = full_grid["quantity"].fillna(0).astype(float)
 
+    # add existing item level data, derived from raw
+    price_mapping = sales_raw_data.sort_values("date").groupby("item")["price_cents"].last()
+    category_mapping = sales_raw_data.groupby("item")["category"].first()
+    weeks_sold_mapping =  full_grid[full_grid["quantity"] > 0].groupby("item")["week"].nunique()
+
+    # append to full_grid
+    full_grid["price_cents"] = full_grid["price_cents"].fillna(full_grid["item"].map(price_mapping)).astype(int)
+    full_grid["category"] = full_grid["item"].map(category_mapping)
+    full_grid["weeks_sold"] = full_grid["item"].map(weeks_sold_mapping).fillna(0).astype(int)
+
     print(full_grid.shape)
     print(full_grid.head())
