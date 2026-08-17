@@ -108,6 +108,20 @@ def build_weekly_parquet(account_id: str):
     print(full_grid.shape)
     print(full_grid.head())
 
+    # write to parquet
+    # needs to be stored as timestamp, no generic week start option
+    full_grid["week_start"] = full_grid["week"].dt.to_timestamp()
+    full_grid = full_grid.drop(columns=["week"])
+
+    # apply col order to match schema
+    col_order = ["item", "category", "week_start", "quantity", "price_cents","weeks_sold", "tier"]
+    full_grid = full_grid[col_order].sort_values(["item", "week_start"]).reset_index(drop=True)
+
+    out_path = _REPO_ROOT / "data" / account_id / "sales_weekly.parquet"
+    full_grid.to_parquet(out_path, index=False, engine="pyarrow")
+    print(f"saved {len(full_grid)} rows -> {out_path}")
+    return out_path
+
 
 def assign_tier(weeks_sold:int):
     if weeks_sold >= 26:
