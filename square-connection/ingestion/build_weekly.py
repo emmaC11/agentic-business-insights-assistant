@@ -47,10 +47,10 @@ def build_weekly_parquet(account_id: str):
     excluded = gap_weeks | partial_weeks
     valid_weeks = pd.PeriodIndex(sorted(set(all_weeks) - excluded), freq="W-SUN")
 
-    print(f"cal weeks count ->{len(all_weeks)}")
-    print(f"gap weeks count -> {len(gap_weeks)} - {sorted(gap_weeks)}")
-    print(f"partial weeks count -> {len(partial_weeks)} -  {sorted(partial_weeks)}")
-    print(f"valid weeks count -> {len(valid_weeks)}")
+    # print(f"cal weeks count ->{len(all_weeks)}")
+    # print(f"gap weeks count -> {len(gap_weeks)} - {sorted(gap_weeks)}")
+    # print(f"partial weeks count -> {len(partial_weeks)} -  {sorted(partial_weeks)}")
+    # print(f"valid weeks count -> {len(valid_weeks)}")
 
     # agg one row per item per week
     # currently same item can appear 5 times as seperate rows in the same week
@@ -69,10 +69,10 @@ def build_weekly_parquet(account_id: str):
         .reset_index()
     )
 
-    print(type(weekly_agg))
-    print(weekly_agg.info())
-    print(weekly_agg.shape)
-    print(weekly_agg.head())
+    # print(type(weekly_agg))
+    # print(weekly_agg.info())
+    # print(weekly_agg.shape)
+    # print(weekly_agg.head())
 
     # add zero fill - products that did not sell for specific week quant shows as 0
     # forecasting model needs this to recognise patterns
