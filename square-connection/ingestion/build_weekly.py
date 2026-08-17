@@ -103,6 +103,16 @@ def build_weekly_parquet(account_id: str):
     full_grid["price_cents"] = full_grid["price_cents"].fillna(full_grid["item"].map(price_mapping)).astype(int)
     full_grid["category"] = full_grid["item"].map(category_mapping)
     full_grid["weeks_sold"] = full_grid["item"].map(weeks_sold_mapping).fillna(0).astype(int)
+    full_grid["tier"] = full_grid["tier"].apply(assign_tier)
 
     print(full_grid.shape)
     print(full_grid.head())
+
+
+    def assign_tier(weeks_sold:int):
+        if weeks_sold >= 26:
+            return "regular"
+        if weeks_sold >= 6:
+            return "intermittent"
+        else:
+            return "rare"
