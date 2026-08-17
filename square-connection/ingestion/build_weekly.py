@@ -103,7 +103,7 @@ def build_weekly_parquet(account_id: str):
     full_grid["price_cents"] = full_grid["price_cents"].fillna(full_grid["item"].map(price_mapping)).astype(int)
     full_grid["category"] = full_grid["item"].map(category_mapping)
     full_grid["weeks_sold"] = full_grid["item"].map(weeks_sold_mapping).fillna(0).astype(int)
-    full_grid["tier"] = full_grid["tier"].apply(assign_tier)
+    full_grid["tier"] = full_grid["weeks_sold"].apply(assign_tier)
 
     print(full_grid.shape)
     print(full_grid.head())
