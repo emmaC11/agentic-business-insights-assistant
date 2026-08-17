@@ -91,5 +91,8 @@ def build_weekly_parquet(account_id: str):
         .reset_index()
         .merge(weekly_agg, on=["item", "week"], how="left")
     )
+
+    full_grid["quantity"] = full_grid["quantity"].fillna(0).astype(float)
+
     print(full_grid.shape)
     print(full_grid.head())
