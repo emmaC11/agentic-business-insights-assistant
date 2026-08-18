@@ -1,15 +1,8 @@
 from mcp.server import MCPServer
+from pathlib import Path
+import pandas as pd
 
-mcp = MCPServer("Demo")
+mcp = MCPServer("agentic-business-insights")
 
-
-@mcp.tool()
-def add(a: int, b: int) -> int:
-    """Add two numbers."""
-    return a + b
-
-
-@mcp.resource("greeting://{name}")
-def greeting(name: str) -> str:
-    """Greet someone by name."""
-    return f"Hello, {name}!"
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+DATA_DIR = _REPO_ROOT / "data"
