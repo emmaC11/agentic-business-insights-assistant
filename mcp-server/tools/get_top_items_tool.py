@@ -40,3 +40,18 @@ def get_top_items(df: pd.DataFrame, start_date: str, end_date: str) -> str:
         .head()
         .reset_index(drop=True)
     )
+
+    # format output into string / readable to user
+    
+    agg["quantity"] = agg["quantity"].astype(int)
+    agg["revenue"] = (agg["revenue_cents"] / 100).map("€{:,.2f}".format)
+    agg.insert(0, "rank", range(1, len(agg) + 1))
+
+    display = agg[["rank", "item", "quantity", "category", "weeks_active", "revenue"]]
+    n_weeks = window["week_start"].nunique()
+
+    summary = (
+        f"Top {len(display)} items from {start_snapped.date()} to {end_snapped.date()} "
+        f"({n_weeks} weeks aggregated)."
+    )
+    return f"{summary}\n\n{display.to_markdown(index=False)}"
