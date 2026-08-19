@@ -23,4 +23,20 @@ def get_top_items(df: pd.DataFrame, start_date: str, end_date: str) -> str:
             f"Available data covers {data_min} to {data_max}."
         )
 
+    # calc revenue col 
+    # use assign as return new df does not alter the df passed as that will be used in other tool calls
+    window = window.assign(revenue_cents=window["quantity"] * window["price_cents"])
 
+    # create new agg df with required cols
+    agg = (
+        window.groupby("item", as_index=False)
+        .agg(
+            quantity=("quantity", "sum"),
+            category=("category", "first"),
+            weeks_active=("quantity", lambda x: (x > 0).sum()),
+            revenue_cents=("revenue_cents", "sum")
+        )
+        .sort_values("quantity", ascending=False)
+        .head()
+        .reset_index(drop=True)
+    )
