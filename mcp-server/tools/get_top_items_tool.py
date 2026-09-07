@@ -1,5 +1,6 @@
 import pandas as pd
 
+# returns top items/ most popular for a specific time period
 def get_top_items(df: pd.DataFrame, start_date: str, end_date: str) -> str:
     # parse str to datetime
     start = pd.to_datetime(start_date)
