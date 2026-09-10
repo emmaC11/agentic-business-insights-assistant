@@ -2,6 +2,7 @@ from mcp.server import MCPServer
 from pathlib import Path
 import pandas as pd
 from tools.get_top_items_tool import get_top_items as top_items_tool
+from tools.get_item_sales import get_item_sales as item_sales_tool
 
 mcp = MCPServer("agentic-business-insights")
 
@@ -19,6 +20,11 @@ def load_weekly(account_id: str) -> pd.DataFrame:
 def get_top_items(account_id: str, start_date: str, end_date: str):
     df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
     return top_items_tool(df, start_date, end_date)
+
+@mcp.tool()
+def get_item_sales(account_id: str, item: str, start_date: str, end_date: str):
+    df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
+    return item_sales_tool(df, item, start_date, end_date)
 
 if __name__ == "__main__":
     mcp.run()
