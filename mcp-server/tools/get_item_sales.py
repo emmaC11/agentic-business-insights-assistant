@@ -25,4 +25,23 @@ def get_item_sales(df: pd.DataFrame, item: str, start_date: str, end_date:str) -
                 f"No sales found between {start_snapped.date()} and {end_snapped.date()}. "
                 f"Available data covers {data_min} to {data_max}."
             )
-    
+
+        item_rows = window[window["item"] == item]
+        total = item_rows["quantity"].sum()
+        weeks_sold = (item_rows["quantity"] > 0).sum()
+        weeks_in_range = window["week_start"].nunique() 
+
+        if total == 0:
+              return f"{item} sold nothing in range chosen"
+
+        # idmax finds index label (row num) to find where max col occurs
+        # rows loc uses idmax index labelto extract entire row with the max value
+        best_week = item_rows.loc[item_rows["quantity"].idxmax()]
+
+        # agent generate res from this
+        return (
+            f"'{item}' — {start.date()} to {end.date()}\n"
+            f"- Total sold: {total} units\n"
+            f"- Sold in {weeks_sold} of {weeks_in_range} weeks\n"
+            f"- Best week: {best_week['week_start'].date()} ({int(best_week['quantity'])} units)"
+        )
