@@ -22,9 +22,9 @@ def get_top_items(account_id: str, start_date: str, end_date: str):
     return top_items_tool(df, start_date, end_date)
 
 @mcp.tool()
-def get_item_sales(account_id: str, item: str, start_date: str, end_date: str):
+def get_item_sales(account_id: str, item: str):
     df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
-    return item_sales_tool(df, item, start_date, end_date)
+    return item_sales_tool(df, item)
 
 if __name__ == "__main__":
     mcp.run()
