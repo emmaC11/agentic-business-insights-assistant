@@ -2,3 +2,4 @@ squareup==44.1.0.20260520
 pandas==3.0.3
 pyarrow
 mcp==2.0.0
+scikit-learn==1.9.1
