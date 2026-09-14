@@ -12,4 +12,15 @@ def mae_calc(actual: list, pred: list):
 def mape_calc(actual: list, pred: list):
     error  = mape(actual, pred)
     # print(f"mean absolute percentage error -> {error}")
+    # need to add handling for 0s, large volume of 0 quant per week in our dataset
+    # (actual - pred) / actual - if 0s not handled lead to zero divison exception
+    # remove the 0 postion/index from the array
+
+    # assign bool to see if 0
+    mask = actual != 0
+
+    # check least 1 true 
+    if not mask.any():
+        return float("nan")
+    return mape(actual[mask], pred[mask])
     return error
