@@ -1,14 +1,20 @@
 # scoring funcs - all models depend on these 2 funcs
+import numpy as np
 from sklearn.metrics import mean_absolute_error as mae
 from sklearn.metrics import mean_absolute_percentage_error as mape
 
 # mean absolute error
-def mae_calc(actual: list, pred: list):
+def mae_calc(actual, pred):
+    actual = np.asarray(actual)
+    pred = np.asarray(pred)
+
     error = mae(actual, pred)
     return error
 
 # mean absolute percentage error
-def mape_calc(actual: list, pred: list):
+def mape_calc(actual, pred):
+    actual = np.asarray(actual)
+    pred = np.asarray(pred)
     # need to add handling for 0s, large volume of 0 quant per week in our dataset
     # (actual - pred) / actual - if 0s not handled lead to zero divison exception
     # remove the 0 postion/index from the array
