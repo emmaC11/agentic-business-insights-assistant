@@ -5,13 +5,10 @@ from sklearn.metrics import mean_absolute_percentage_error as mape
 # mean absolute error
 def mae_calc(actual: list, pred: list):
     error = mae(actual, pred)
-    # print(f"mean absolute error -> {error}")
     return error
 
 # mean absolute percentage error
 def mape_calc(actual: list, pred: list):
-    error  = mape(actual, pred)
-    # print(f"mean absolute percentage error -> {error}")
     # need to add handling for 0s, large volume of 0 quant per week in our dataset
     # (actual - pred) / actual - if 0s not handled lead to zero divison exception
     # remove the 0 postion/index from the array
@@ -23,4 +20,3 @@ def mape_calc(actual: list, pred: list):
     if not mask.any():
         return float("nan")
     return mape(actual[mask], pred[mask])
-    return error
