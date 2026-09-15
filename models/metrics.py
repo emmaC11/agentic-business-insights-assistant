@@ -8,6 +8,9 @@ def mae_calc(actual, pred):
     actual = np.asarray(actual)
     pred = np.asarray(pred)
 
+    if len(actual) != len(pred):
+        raise ValueError("actual & pred params must be same length")
+
     error = mae(actual, pred)
     return error
 
@@ -15,6 +18,9 @@ def mae_calc(actual, pred):
 def mape_calc(actual, pred):
     actual = np.asarray(actual)
     pred = np.asarray(pred)
+
+    if len(actual) != len(pred):
+        raise ValueError("actual & pred params must be same length")
     # need to add handling for 0s, large volume of 0 quant per week in our dataset
     # (actual - pred) / actual - if 0s not handled lead to zero divison exception
     # remove the 0 postion/index from the array
