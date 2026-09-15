@@ -8,6 +8,9 @@ def split_dataset(series, test_weeks=TEST_WEEKS):
     # 1d num py array is expected input, but can accept list, series, array etc
     series = np.asarray(series)
 
+    if len(series) < test_weeks:
+        raise ValueError(f"min of {test_weeks} weeks of data is required")
+
 
     # split into train & test via slicing
     train = series[:-test_weeks] # full range of data minus test_weeks
