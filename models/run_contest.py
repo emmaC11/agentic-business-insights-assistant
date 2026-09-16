@@ -15,7 +15,7 @@ MODELS = {
     # add other models here when created
 }
 
-def model_analysis():
+def main():
     # load weekly parq as df
     path = DATA_DIR / "TestBusinessAcc" / "sales_weekly.parquet" # replace hardcoded acc name
     df = pd.read_parquet(path)
@@ -58,6 +58,9 @@ def model_analysis():
         print(f"\n{model_name}: n={len(subset)}")
         print(f"mean MAPE: {subset['mape'].mean():.4f} ({subset['mape'].mean() * 100:.2f}%)")
         print(f"mean MAE:  {subset['mae'].mean():.2f} units")
+
+if __name__ == "__main__":
+    main()
   
 
 
