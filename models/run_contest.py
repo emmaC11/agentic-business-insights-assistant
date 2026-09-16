@@ -49,6 +49,7 @@ def main():
     # 3 - save output to df for analysis & provide summary
     model_invocation_results = pd.DataFrame(rows)
     out_dir = _REPO_ROOT / "data" / "TestBusinessAcc" / "models" # replace hardcoded acc name
+    out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / "run_contest_results.parquet"
     model_invocation_results.to_parquet(out_path)
 
