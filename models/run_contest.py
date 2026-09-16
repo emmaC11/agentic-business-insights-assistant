@@ -51,7 +51,14 @@ def model_analysis():
     out_dir = _REPO_ROOT / "data" / "TestBusinessAcc" / "models" # replace hardcoded acc name
     out_path = out_dir / "run_contest_results.parquet"
     model_invocation_results.to_parquet(out_path)
-    
+
+    # 4 - summary
+    for model_name in MODELS:
+        subset = model_invocation_results[(model_invocation_results["model"] == model_name)]
+        print(f"\n{model_name}: n={len(subset)}")
+        print(f"mean MAPE: {subset['mape'].mean():.4f} ({subset['mape'].mean() * 100:.2f}%)")
+        print(f"mean MAE:  {subset['mae'].mean():.2f} units")
+  
 
 
 
