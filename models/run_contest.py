@@ -20,4 +20,10 @@ def model_analysis():
     items = regular_items["item"].unique()
     print(f"loaded {len(regular_items)} rows, w {len(items)} unique items")
 
+    for item in items:
+        # 1 - find item in df, convert to numpy array (external components expect this dt), split into train & test
+        item_df = regular_items[regular_items["item"] == item].sort_values("week_start")
+        quantities = item_df["quantity"].to_numpy()
+        train, test = split_dataset(quantities)
+
 
