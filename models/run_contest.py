@@ -25,6 +25,7 @@ def main():
     items = regular_items["item"].unique()
     print(f"loaded {len(regular_items)} rows, w {len(items)} unique items")
 
+    rows = []
     for item in items:
         # 1 - find item in df, convert to numpy array (external components expect this dt), split into train & test
         item_df = regular_items[regular_items["item"] == item].sort_values("week_start")
@@ -32,9 +33,8 @@ def main():
         train, test = split_dataset(quantities)
 
         # 2 - invoke model
-        rows = []
         for model_name, model_fn in MODELS.items():
-            pred = model_fn(train, h=len(TEST_WEEKS))
+            pred = model_fn(train, h=TEST_WEEKS)
             item_mape = mape_calc(test, pred)
             item_mae = mae_calc(test, pred)
 
