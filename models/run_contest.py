@@ -15,4 +15,9 @@ def model_analysis():
     path = DATA_DIR / "TestBusinessAcc" / "sales_weekly.parquet" # replace hardcoded acc name
     df = pd.read_parquet(path)
 
+    # filter regular tier items only - models can only train on dataset w regular sales
+    regular_items = df[df["tier"] == "regular"]
+    items = regular_items["item"].unique()
+    print(f"loaded {len(regular_items)} rows, w {len(items)} unique items")
+
 
