@@ -9,6 +9,11 @@ from models.metrics import mae_calc, mape_calc
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = _REPO_ROOT / "data"
+MODELS = {
+    # model name + fn
+    "naive": naive
+    # add other models here when created
+}
 
 def model_analysis():
     # load weekly parq as df
@@ -25,5 +30,12 @@ def model_analysis():
         item_df = regular_items[regular_items["item"] == item].sort_values("week_start")
         quantities = item_df["quantity"].to_numpy()
         train, test = split_dataset(quantities)
+
+        # 2 - invoke model
+        for model_name, model_fn in MODELS.items():
+            pred = model_fn(train, h=len(TEST_WEEKS))
+            item_mape = mape_calc(test, pred)
+            item_mae = mae_calc(test, pred)
+
 
 
