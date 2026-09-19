@@ -61,6 +61,21 @@ def main():
         print(f"mean MAPE: {subset['mape'].mean():.4f} ({subset['mape'].mean() * 100:.2f}%)")
         print(f"mean MAE:  {subset['mae'].mean():.2f} units")
 
+    # 5 - create new lookup df for MCP tool invocation
+    # pick lowest mape and mae for each item -> meaning best model
+    # eg -> cupcake box, ma, 0.1, 0.1
+    model_selection_per_item = (
+        model_invocation_results
+        .sort_values(["item", "mape", "mae"])
+        .groupby("item", as_index=False)
+        .first()
+        [["item", "model", "mape", "mae"]]
+        .rename(columns={
+            "model": "model winner"
+        })
+    )
+
+
 if __name__ == "__main__":
     main()
   
