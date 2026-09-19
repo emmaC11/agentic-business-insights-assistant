@@ -19,4 +19,14 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
     model_name = item_model_row["model_row"]
     mape = item_model_row["mape"]
     mae = item_model_row["mae"]
+
+    # refit/retrain model w full 58 week history -> train - 50, test - 8
+    full_series = (
+        df[df["item" == item]]
+        .sort_values("week_start")["quanitity"] # target
+        .to_numpy()
+    )
+
+    models_fn = model_name
+    pred = models_fn(full_series, h=horizon_weeks)
     
