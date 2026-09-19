@@ -15,7 +15,7 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
         return (f"item is not in regualr tier, only items in regualr tiers can be forecasted") # add tool to fetch regular tiered items?
 
     # use lookup df to get model outputs for specific item
-    item_model_row = model_selection_df [model_selection_df["item"] == item]
+    item_model_row = model_selection_df[model_selection_df["item"] == item]
     model_name = item_model_row["model_row"]
     mape = item_model_row["mape"]
     mae = item_model_row["mae"]
