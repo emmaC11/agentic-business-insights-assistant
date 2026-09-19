@@ -1,5 +1,12 @@
 import pandas as pd
 import numpy as np
+from models.baselines import naive, moving_average, ets
+
+MODELS = {
+    "naive": naive,
+    "moving_average": moving_average,
+    "ets": ets,
+}
 
 # forecast n weeks for item by using its best performing model (lookup df)
 def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: str, horizon_weeks: int):
@@ -28,7 +35,7 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
         .to_numpy()
     )
 
-    models_fn = model_name
+    models_fn = MODELS[model_name]
     pred = models_fn(full_series, h=horizon_weeks)
 
     # round pred, cannot have a decimal of an item 
