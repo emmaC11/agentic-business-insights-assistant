@@ -47,7 +47,7 @@ def ets(train: np.ndarray, h:int) -> np.ndarray:
         train,
         trend="add", # data has upward & downward trend, it can vary per week
         seasonal=None, # have not worked / added seasonal trends
-        initialization_method="estumated"
+        initialization_method="estimated"
         ).fit()
 
     forecast = model.forecast(h)
