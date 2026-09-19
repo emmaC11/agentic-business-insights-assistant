@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 # forecast n weeks for item by using its best performing model (lookup df)
 def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: str, horizon_weeks: int):
@@ -29,4 +30,19 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
 
     models_fn = model_name
     pred = models_fn(full_series, h=horizon_weeks)
+
+    # round pred, cannot have a decimal of an item 
+    pred_rounded = np.round(pred).astype(int)
+    total = int(pred_rounded.sum())
+
+    weekly_pred = ''
+    for week, qty in enumerate(pred_rounded):
+        weekly_pred += (f"\n -week {week + 1}: {qty} units")
+
+    return (
+        (f"Forecast for {item} - next {horizon_weeks} weeks:")
+        (f"{weekly_pred}")
+        (f"-Total: {total} unites")
+        (f"-Model: {model_name} (MAPE: {mape}, MAE: {mae})")
+    )
     
