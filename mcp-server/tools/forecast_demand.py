@@ -47,9 +47,9 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
         weekly_pred += (f"\n -week {week + 1}: {qty} units")
 
     return (
-        (f"Forecast for {item} - next {horizon_weeks} weeks:")
-        (f"{weekly_pred}")
-        (f"-Total: {total} units")
-        (f"-Model: {model_name} (MAPE: {mape * 100:.2f}%, MAE: {mae} units)")
+        f"Forecast for {item} - next {horizon_weeks} weeks:"
+        f"{weekly_pred}"
+        f"-Total: {total} units"
+        f"-Model: {model_name} (MAPE: {mape * 100:.2f}%, MAE: {mae} units)"
     )
     
