@@ -75,6 +75,9 @@ def main():
         })
     )
 
+    model_selection_path = out_dir/ "model_selection_per_item.parquet"
+    model_selection_path.to_parquet(model_selection_path, index=False)
+    print(model_selection_per_item["winner"].values_counts())
 
 if __name__ == "__main__":
     main()
