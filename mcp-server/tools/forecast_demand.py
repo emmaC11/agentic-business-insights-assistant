@@ -7,7 +7,7 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
         raise ValueError("pred window must be greater than 0 and less than 12 weeks")
 
     # check if item searched exists
-    if item not in df["item"].nunique():
+    if item not in df["item"].unique():
         return (f"item not found in sales history - {item}")
 
     # check item is in regular tier (baseline models built using 'regular' tier)

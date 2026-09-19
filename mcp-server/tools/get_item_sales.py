@@ -7,7 +7,7 @@ def get_item_sales(df: pd.DataFrame, item: str) -> str:
         latest_date = df["week_start"].max()
 
         # check if item searched exists
-        if item not in df["item"].nunique():
+        if item not in df["item"].unique():
             return (f"item not found in sales history - {item}")
 
         item_rows = df[df["item"] == item]
