@@ -71,7 +71,7 @@ def main():
         .first()
         [["item", "model", "mape", "mae"]]
         .rename(columns={
-            "model": "model winner"
+            "model": "model_winner"
         })
     )
 
