@@ -6,6 +6,10 @@ def get_item_sales(df: pd.DataFrame, item: str) -> str:
         earliest_date = df["week_start"].min()
         latest_date = df["week_start"].max()
 
+        # check if item searched exists
+        if item not in df["item"].nunique():
+            return (f"item not found in sales history - {item}")
+
         item_rows = df[df["item"] == item]
         total = item_rows["quantity"].sum()
         weeks_sold = (item_rows["quantity"] > 0).sum()
