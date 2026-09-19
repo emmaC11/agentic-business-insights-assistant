@@ -8,4 +8,9 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
     # check if item searched exists
     if item not in df["item"].nunique():
         return (f"item not found in sales history - {item}")
+
+    # check item is in regular tier (baseline models built using 'regular' tier)
+    tier = df[df["item"] == item]["tier"].iloc[0] # return raw string over pandas series
+    if tier != "regular":
+        return (f"item is not in regualr tier, only items in regualr tiers can be forecasted") # add tool to fetch regular tiered items?
     
