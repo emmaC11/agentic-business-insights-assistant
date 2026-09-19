@@ -23,7 +23,7 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
 
     # refit/retrain model w full 58 week history -> train - 50, test - 8
     full_series = (
-        df[df["item" == item]]
+        df[df["item"] == item]
         .sort_values("week_start")["quanitity"] # target
         .to_numpy()
     )
