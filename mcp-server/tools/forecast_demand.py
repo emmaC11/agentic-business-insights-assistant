@@ -42,7 +42,7 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
     return (
         (f"Forecast for {item} - next {horizon_weeks} weeks:")
         (f"{weekly_pred}")
-        (f"-Total: {total} unites")
-        (f"-Model: {model_name} (MAPE: {mape}, MAE: {mae})")
+        (f"-Total: {total} units")
+        (f"-Model: {model_name} (MAPE: {mape * 100:.2f}%, MAE: {mae} units)")
     )
     
