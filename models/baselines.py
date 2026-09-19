@@ -45,10 +45,10 @@ def ets(train: np.ndarray, h:int) -> np.ndarray:
 
     model = ExponentialSmoothing (
         train,
-        trend="add" # data has upward & downward trend, it can vary per week
+        trend="add", # data has upward & downward trend, it can vary per week
         seasonal=None, # have not worked / added seasonal trends
         initialization_method="estumated"
-    ).fit()
+        ).fit()
 
     forecast = model.forecast(h)
 
