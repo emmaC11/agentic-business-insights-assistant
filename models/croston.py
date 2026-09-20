@@ -7,6 +7,13 @@ def croston(train: np.ndarray, h: int) -> np.ndarray:
     # used claude to help understand logic required & build fn - as not leveraging library
 
     train = np.asarray(train)
+
+    if len(train) == 0:
+        raise ValueError("train np array empty")
+
+    if h <= 0:
+        raise ValueError("number of weeks to forecast / horizon must be greater than 0")
+
     # split series into 2, non-zeros & intervals
     non_zeros_indices = np.where(train > 0)[0]
     non_zeros = train[non_zeros_indices]
