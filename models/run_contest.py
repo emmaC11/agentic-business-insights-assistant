@@ -18,20 +18,31 @@ MODELS = {
     "croston": croston
 }
 
+INTERMITTENT_MODELS = {
+    "croston": croston
+}
+
+#  helper fn for model assignment
+def models_for_tier(tier):
+    if tier == "regular":
+        return MODELS
+    if tier == "intermittent":
+        return INTERMITTENT_MODELS
+
 def main():
     # load weekly parq as df
     path = DATA_DIR / "TestBusinessAcc" / "sales_weekly.parquet" # replace hardcoded acc name
     df = pd.read_parquet(path)
 
     # filter regular tier items only - models can only train on dataset w regular sales
-    regular_items = df[df["tier"] == "regular"]
-    items = regular_items["item"].unique()
-    print(f"loaded {len(regular_items)} rows, w {len(items)} unique items")
+    tier_items = df[df["tier"].isin(["regular", "intermittent"])]
+    items = tier_items["item"].unique()
+    print(f"loaded {len(tier_items)} rows, w {len(items)} unique items")
 
     rows = []
     for item in items:
         # 1 - find item in df, convert to numpy array (external components expect this dt), split into train & test
-        item_df = regular_items[regular_items["item"] == item].sort_values("week_start")
+        item_df = tier_items[tier_items["item"] == item].sort_values("week_start")
         quantities = item_df["quantity"].to_numpy()
         train, test = split_dataset(quantities)
 
