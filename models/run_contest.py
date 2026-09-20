@@ -46,19 +46,37 @@ def main():
         quantities = item_df["quantity"].to_numpy()
         train, test = split_dataset(quantities)
 
-        # 2 - invoke model
-        for model_name, model_fn in MODELS.items():
-            pred = model_fn(train, h=TEST_WEEKS)
-            item_mape = mape_calc(test, pred)
-            item_mae = mae_calc(test, pred)
+        # 2 - invoke model for specific tiers
+        item_tier = item_df["tier"].iloc[0]
+        
+        if item_tier == "regular":
+            for model_name, model_fn in MODELS.items():
+                pred = model_fn(train, h=TEST_WEEKS)
+                item_mape = mape_calc(test, pred)
+                item_mae = mae_calc(test, pred)
 
-            # one row for each item
-            rows.append({
-                "item": item,
-                "model": model_name,
-                "mape": item_mape,
-                "mae": item_mae
-            })
+                # one row for each item
+                rows.append({
+                    "item": item,
+                    "model": model_name,
+                    "mape": item_mape,
+                    "mae": item_mae
+                })
+
+        if item_tier == "intermittent":
+            for model_name, model_fn in INTERMITTENT_MODELS.items():
+                pred = model_fn(train, h=TEST_WEEKS)
+                item_mape = mape_calc(test, pred)
+                item_mae = mae_calc(test, pred)
+
+                # one row for each item
+                rows.append({
+                    "item": item,
+                    "model": model_name,
+                    "mape": item_mape,
+                    "mae": item_mae
+                })
+
 
     # 3 - save output to df for analysis & provide summary
     model_invocation_results = pd.DataFrame(rows)
