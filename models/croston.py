@@ -15,7 +15,7 @@ def croston(train: np.ndarray, h: int) -> np.ndarray:
     extended_indices = np.insert(non_zeros, 0, -1)
     intervals = np.diff(extended_indices)
 
-    # used claude for this block below - line 17-25
+    # used claude for this block below - line 19-27
     size_hat = non_zeros[0]
     interval_hat = intervals[0]
 
@@ -25,3 +25,5 @@ def croston(train: np.ndarray, h: int) -> np.ndarray:
 
     # SBA bias correction (Syntetos & Boylan 2005)
     forecast = (size_hat / interval_hat) * (1 - CROSTON_ALPHA / 2)
+
+    return np.full(h, forecast)
