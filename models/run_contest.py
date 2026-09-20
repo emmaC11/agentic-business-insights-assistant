@@ -10,7 +10,7 @@ from models.metrics import mae_calc, mape_calc
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = _REPO_ROOT / "data"
-MODELS = {
+REGUALR_MODELS = {
     # model name + fn
     "naive": naive,
     "moving_average":moving_average,
@@ -43,7 +43,7 @@ def main():
         item_tier = item_df["tier"].iloc[0]
         
         if item_tier == "regular":
-            for model_name, model_fn in MODELS.items():
+            for model_name, model_fn in REGUALR_MODELS.items():
                 pred = model_fn(train, h=TEST_WEEKS)
                 item_mape = mape_calc(test, pred)
                 item_mae = mae_calc(test, pred)
@@ -79,7 +79,7 @@ def main():
     model_invocation_results.to_parquet(out_path)
 
     # 4 - summary
-    for model_name in {**MODELS, **INTERMITTENT_MODELS}:
+    for model_name in {**REGUALR_MODELS, **INTERMITTENT_MODELS}:
         subset = model_invocation_results[(model_invocation_results["model"] == model_name)]
         print(f"\n{model_name}: n={len(subset)}")
         print(f"mean MAPE: {subset['mape'].mean():.4f} ({subset['mape'].mean() * 100:.2f}%)")
