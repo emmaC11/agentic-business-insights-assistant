@@ -15,19 +15,12 @@ MODELS = {
     "naive": naive,
     "moving_average":moving_average,
     "ets": ets,
-    "croston": croston
 }
 
 INTERMITTENT_MODELS = {
     "croston": croston
 }
 
-#  helper fn for model assignment
-def models_for_tier(tier):
-    if tier == "regular":
-        return MODELS
-    if tier == "intermittent":
-        return INTERMITTENT_MODELS
 
 def main():
     # load weekly parq as df
