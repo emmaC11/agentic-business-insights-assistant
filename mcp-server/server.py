@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 from tools.get_top_items_tool import get_top_items as top_items_tool
 from tools.get_item_sales import get_item_sales as item_sales_tool
+from tools.forecast_demand import forecast_demand as forecast_item_demand_tool
 
 mcp = MCPServer("agentic-business-insights")
 
@@ -16,6 +17,13 @@ def load_weekly(account_id: str) -> pd.DataFrame:
     df = pd.read_parquet(path)
     return df
 
+def load_lookup(account_id: str) -> pd.DataFrame:
+    path = DATA_DIR / account_id / "models" / "model_selection_per_item.parquet"
+    if not path.exists():
+        raise FileNotFoundError(f"cannot find model selection parquet for {account_id}")
+    df = pd.read_parquet(path)
+    return df
+
 @mcp.tool()
 def get_top_items(account_id: str, start_date: str, end_date: str):
     df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
@@ -25,6 +33,12 @@ def get_top_items(account_id: str, start_date: str, end_date: str):
 def get_item_sales(account_id: str, item: str):
     df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
     return item_sales_tool(df, item)
+
+@mcp.tool()
+def get_item_forecast(account_id: str, item:str, h: int):
+    df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
+    lookup_df =load_lookup(account_id="TestBusinessAcc") 
+    return forecast_item_demand_tool(df, lookup_df, item, h)
 
 if __name__ == "__main__":
     mcp.run()
