@@ -5,6 +5,7 @@ import pandas as pd
 from pathlib import Path
 from models.split import split_dataset, TEST_WEEKS
 from models.baselines import naive, moving_average, ets
+from models.croston import croston
 from models.metrics import mae_calc, mape_calc
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -13,7 +14,8 @@ MODELS = {
     # model name + fn
     "naive": naive,
     "moving_average":moving_average,
-    "ets": ets
+    "ets": ets,
+    "croston": croston
 }
 
 def main():
