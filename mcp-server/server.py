@@ -1,13 +1,16 @@
 from mcp.server import MCPServer
+import sys
 from pathlib import Path
+
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_REPO_ROOT))
+
 import pandas as pd
 from tools.get_top_items_tool import get_top_items as top_items_tool
 from tools.get_item_sales import get_item_sales as item_sales_tool
 from tools.forecast_demand import forecast_demand as forecast_item_demand_tool
 
 mcp = MCPServer("agentic-business-insights")
-
-_REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = _REPO_ROOT / "data"
 
 def load_weekly(account_id: str) -> pd.DataFrame:
