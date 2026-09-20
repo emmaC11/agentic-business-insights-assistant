@@ -18,6 +18,10 @@ def croston(train: np.ndarray, h: int) -> np.ndarray:
     non_zeros_indices = np.where(train > 0)[0]
     non_zeros = train[non_zeros_indices]
 
+    # if item has no sales break and return 0 pred
+    if len(non_zeros) == 0:
+        return np.zeros(h)
+
     # list of gaps in weeks between non zero values
     extended_indices = np.insert(non_zeros, 0, -1)
     intervals = np.diff(extended_indices)
