@@ -17,10 +17,10 @@ def forecast_demand(df: pd.DataFrame, model_selection_df: pd.DataFrame, item: st
     if item not in df["item"].unique():
         return (f"item not found in sales history - {item}")
 
-    # check item is in regular tier (baseline models built using 'regular' tier)
+    # check item is in regular or intermittent (croston) tier (baseline models built using 'regular' tier)
     tier = df[df["item"] == item]["tier"].iloc[0] # return raw string over pandas series
-    if tier != "regular":
-        return (f"item is not in regualr tier, only items in regualr tiers can be forecasted") # add tool to fetch regular tiered items?
+    if tier not in("regular", "intermittent"):
+        return (f"item is not in regular or intermittent tier, only items in regualr tiers can be forecasted")
 
     # use lookup df to get model outputs for specific item
     item_model_row = model_selection_df[model_selection_df["item"] == item].iloc[0]
