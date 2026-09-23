@@ -1,11 +1,13 @@
 import pandas as pd
 import numpy as np
 from models.baselines import naive, moving_average, ets
+from models.croston import croston
 
 MODELS = {
     "naive": naive,
     "moving_average": moving_average,
     "ets": ets,
+    "croston": croston
 }
 
 # forecast n weeks for item by using its best performing model (lookup df)
