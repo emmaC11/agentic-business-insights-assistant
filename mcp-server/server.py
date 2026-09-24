@@ -29,18 +29,18 @@ def load_lookup(account_id: str) -> pd.DataFrame:
 
 @mcp.tool()
 def get_top_items(account_id: str, start_date: str, end_date: str):
-    df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
+    df = load_weekly(account_id=account_id)
     return top_items_tool(df, start_date, end_date)
 
 @mcp.tool()
 def get_item_sales(account_id: str, item: str):
-    df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
+    df = load_weekly(account_id=account_id)
     return item_sales_tool(df, item)
 
 @mcp.tool()
 def get_item_forecast(account_id: str, item:str, h: int):
-    df = load_weekly(account_id="TestBusinessAcc") # remove hardcoding
-    lookup_df =load_lookup(account_id="TestBusinessAcc") 
+    df = load_weekly(account_id=account_id)
+    lookup_df =load_lookup(account_id=account_id)
     return forecast_item_demand_tool(df, lookup_df, item, h)
 
 if __name__ == "__main__":

@@ -9,9 +9,9 @@ import os
 logger = logging.getLogger(__name__)
 
 class SquareIngestionClient:
-    def __init__(self, token, env):
+    def __init__(self, token, env, account_id):
         self._client = Square(environment=env, token=token)
-        self.account_id = "TestBusinessAcc"
+        self.account_id = account_id
         self.loc = [os.environ['LOCATION_ID']]
 
 

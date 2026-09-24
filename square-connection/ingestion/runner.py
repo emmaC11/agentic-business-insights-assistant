@@ -7,11 +7,12 @@ from ingestion.storage import save_sales_records
 load_dotenv()
 
 token = os.environ['SQUARE_PROD_ACCESS_TOKEN']
-account_id = "TestBusinessAcc"
+account_id = os.environ['ACCOUNT_ID']
 
 client = SquareIngestionClient(
     token=token,
-    env=SquareEnvironment.PRODUCTION
+    env=SquareEnvironment.PRODUCTION,
+    account_id=account_id,
 )
 
 # print("Calling catalog_lookup...")
