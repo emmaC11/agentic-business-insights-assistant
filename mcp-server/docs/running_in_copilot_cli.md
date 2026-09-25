@@ -1,6 +1,6 @@
 #  Running MCP Server in copilot-cli
 
-## 1 - Install copilot cl
+## 1 - Install Copilot CLI
 Requires a GitHub subscription, can sign up here https://github.com
 
 Open a new powershell terminal and run the command:
